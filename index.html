@@ -90,7 +90,6 @@
             border-radius: 10px;
             text-align: center;
             bottom: 20%;
-
         }
         .popup img {
             width: 80px;
@@ -128,16 +127,23 @@
         <img src="victim-image3.png" class="victim-option" onclick="selectVictim(3)">
     </div>
     <audio id="win-music" src="win-music.mp3"></audio>
-
     <div class="popup" id="winPopup">
         <h2>Cool! You killed everyone 😎</h2>
         <p>All রক্তচোষা are electrocuted!</p>
         <p>Contact Developer: <a href="https://www.facebook.com/profile.php?id=61560113140365" target="_blank">Facebook</a></p>
         <button class="restart-btn" onclick="restartGame()">Restart Game</button>
     </div>
+
+    <!-- Updated: Added additional shock sound for each victim -->
     <audio id="shock-sound1" src="electric-shock1.mp3"></audio>
+    <audio id="shock-sound1-extra" src="extra1.mp3"></audio>
+
     <audio id="shock-sound2" src="electric-shock2.mp3"></audio>
+    <audio id="shock-sound2-extra" src="extra2.mp3"></audio>
+
     <audio id="shock-sound3" src="electric-shock3.mp3"></audio>
+    <audio id="shock-sound3-extra" src="extra3.mp3"></audio>
+
     <script>
         let currentVictim = 1;
         let health = { 1: 50, 2: 50, 3: 50 };
@@ -149,10 +155,18 @@
                 shockEffect.style.opacity = "0";
             }, 100);
             
-            let audio = document.getElementById("shock-sound" + currentVictim);
-            audio.currentTime = 0;
-            audio.play();
-            
+            // Play primary shock sound
+            let audio1 = document.getElementById("shock-sound" + currentVictim);
+            audio1.currentTime = 0;
+            audio1.play();
+
+            // Play additional shock sound with a small delay
+            setTimeout(() => {
+                let audio2 = document.getElementById("shock-sound" + currentVictim + "-extra");
+                audio2.currentTime = 0;
+                audio2.play();
+            }, 300);
+
             decreaseHealth();
         }
 
@@ -171,6 +185,9 @@
         function checkWinCondition() {
             if (health[1] <= 0 && health[2] <= 0 && health[3] <= 0) {
                 document.getElementById("winPopup").style.display = "block";
+                let winMusic = document.getElementById("win-music");
+                winMusic.currentTime = 0;
+                winMusic.play();
             }
         }
 
@@ -184,18 +201,6 @@
             health = { 1: 50, 2: 50, 3: 50 };
             document.getElementById("winPopup").style.display = "none";
             updateHealthBar();
-        }
-
-
-
-
-        function checkWinCondition() {
-            if (health[1] <= 0 && health[2] <= 0 && health[3] <= 0) {
-                document.getElementById("winPopup").style.display = "block";
-                let winMusic = document.getElementById("win-music");
-                winMusic.currentTime = 0;
-                winMusic.play();
-            }
         }
     </script>
 </body>
